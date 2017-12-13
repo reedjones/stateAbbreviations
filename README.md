@@ -1,5 +1,5 @@
-# stateAbbreviations
-Function to convert between name and abbreviations for US states and Canadian provinces.
+  # stateAbbreviations
+Function to convert between name and abbreviations for US states and Canadian provinces.  
 Based on stateToAbbr.js: https://gist.github.com/calebgrove/c285a9510948b633aa47
 
 Usage:
