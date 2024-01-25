@@ -1,8 +1,11 @@
-const TO_NAME = 1;
-const TO_ABBREVIATED = 2;
+(function ($) {
+    const TO_NAME = 1;
+    const TO_ABBREVIATED = 2;
 
-function convertRegion(input, to) {
-    var states = [
+
+
+    $.fn.convertRegion = function (to) {
+            const states = [
         ['Alabama', 'AL'],
         ['Alaska', 'AK'],
         ['American Samoa', 'AS'],
@@ -65,7 +68,7 @@ function convertRegion(input, to) {
         ['Wyoming', 'WY'],
     ];
     
-    var provinces = [
+    const provinces = [
         ['Alberta', 'AB'],
         ['British Columbia', 'BC'],
         ['Manitoba', 'MB'],
@@ -80,22 +83,35 @@ function convertRegion(input, to) {
         ['Saskatchewan', 'SK'],
         ['Yukon', 'YT'],
     ];
+    
+    const regions = states.concat(provinces);
+    
+        return this.each(function () {
+            let input = $(this).val();
 
-    var regions = states.concat(provinces);
+            if (to === TO_ABBREVIATED) {
+                input = input.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+                for (let region of regions) {
+                    if (region[0] === input) {
+                        $(this).val(region[1]);
+                        break;
+                    }
+                }
+            } else if (to === TO_NAME) {
+                input = input.toUpperCase();
+                for (let region of regions) {
+                    if (region[1] === input) {
+                        $(this).val(region[0]);
+                        break;
+                    }
+                }
+            }
+        });
+    };
 
-    if (to == TO_ABBREVIATED) {
-        input = input.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-        for (region of regions) {
-            if (region[0] == input) {
-                return (region[1]);
-            }
-        }
-    } else if (to == TO_NAME) {
-        input = input.toUpperCase();
-        for (region of regions) {
-            if (region[1] == input) {
-                return (region[0]);
-            }
-        }
-    }
-}
+    // Bind the conversion to form submission
+    $(document).on('submit', 'form', function () {
+        $(this).find('input[type="text"]').convertRegion(TO_ABBREVIATED); // Change to TO_NAME if needed
+    });
+
+})(jQuery);
